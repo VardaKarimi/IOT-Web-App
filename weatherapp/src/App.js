@@ -18,9 +18,15 @@ function App() {
 
   const fetchWeather = async () => {
     setProgress(0)
-    const url = `https://dataservice.accuweather.com/currentconditions/v1/188139?apikey=GA7BFl2QnqC1m7EZCPJFden8d51qAq7A&details=true`;
+    // const url = `https://dataservice.accuweather.com/currentconditions/v1/188139?apikey=GA7BFl2QnqC1m7EZCPJFden8d51qAq7A&details=true`;
+    const url = `http://localhost:3333/api/get`
     setProgress(20)
-    const response = await fetch(url);
+    const response = await fetch(url,{
+      method:"GET",
+      headers:{
+        "Content-type":"application/json"
+      }
+    });
     setTimeout(() => {
       setProgress(50)  
     }, 1000);
@@ -29,13 +35,22 @@ function App() {
       setProgress(80)  
     }, 1000);
 
-    const w = JSON.stringify({
-      temperature: json[0].Temperature.Metric.Value,
-      humidity: json[0].RelativeHumidity,
-      uv: json[0].UVIndex,
-      uvText: json[0].UVIndexText,
-      rain: false,
-    });
+    // const w = JSON.stringify({
+    //   temperature: json[0].Temperature.Metric.Value,
+    //   humidity: json[0].RelativeHumidity,
+    //   uv: json[0].UVIndex,
+    //   uvText: json[0].UVIndexText,
+    //   rain: false,
+    // });
+
+    const w= JSON.stringify({
+      temperature: json[json.length-1].temperature,
+      humidity: json[json.length-1].humidity,
+      rain: json[json.length-1].rain,
+      analogRain: json[json.length-1].analogRain,
+      uv: json[json.length-1].uv
+    })
+
     localStorage.setItem("weather", w);
     setProgress(100)
   };
